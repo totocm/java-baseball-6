@@ -4,33 +4,21 @@ import camp.nextstep.edu.missionutils.Console;
 import camp.nextstep.edu.missionutils.Randoms;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-public class Application {
+public class AllForOne {
 
-  private static Set<Integer> list(){
-    Set<Integer> list = new HashSet<>();
-    while(list.size() < 3) {
-      list.add(Randoms.pickNumberInRange(1,9));
-    }
-    System.out.println(list);
-    return list;
+
+  protected static List<Integer> list(){
+  List<Integer> Computer =
+      Randoms.pickUniqueNumbersInRange(1,9,3);
+  System.out.println(Computer);
+  return Computer;
   }
-  private static List<Integer> stringChangeIntegerList(String input){
-    List<Integer> numbers = new ArrayList<>();
-    for (char c : input.toCharArray()){
-      numbers.add(Character.getNumericValue(c));
-    }
-    return numbers;
-  }
-
-  public static void main(String[] args) {
+  protected static void main(String[] args) {
 
     System.out.println("숫자 야구 게임을 시작합니다");
-    List<Integer> Computer = new ArrayList<>();
-    Computer.addAll(list());
+    List<Integer> Computer = list();
 
     outLoop:
     while(true) {
@@ -41,14 +29,23 @@ public class Application {
         if (userChat.trim().isEmpty()) {throw new IllegalArgumentException("빈 문자열 예외");}
         if (userChat.length() != 3) {throw new IllegalArgumentException("입력 3칸이 초과");}
 
-        List<Integer> userNumbers = stringChangeIntegerList(userChat);
-        System.out.println(userNumbers);
+        int num0 = Character.getNumericValue(userChat.charAt(0));
+        int num1 = Character.getNumericValue(userChat.charAt(1));
+        int num2 = Character.getNumericValue(userChat.charAt(2));
 
-        if (new HashSet<>(userNumbers).size() != userNumbers.size()){
-          System.out.println(new HashSet<>(userNumbers).size());
-          System.out.println(userNumbers.size());
-          throw new IllegalArgumentException("중복된 숫자 발견");
+        if (num0 == num1) {
+          throw new IllegalArgumentException("첫번째 두번째 같은 수 입력");
+        } else if (num0 == num2) {
+          throw new IllegalArgumentException("첫번째 세번째 같은 수 입력");
+        } else if (num1 == num2) {
+          throw  new IllegalArgumentException("두번째 세번째 같은 수 입력");
         }
+
+        List<Integer> userNumbers = new ArrayList<>();
+        userNumbers.add(num0);
+        userNumbers.add(num1);
+        userNumbers.add(num2);
+        System.out.println(userNumbers);
 
 
         for (int num : userNumbers) {
@@ -68,11 +65,11 @@ public class Application {
           }
         }
 
-        if (ball != 0) {
-          System.out.print(ball + "볼");
-        }
         if (st != 0){
-          System.out.println(st + "스트라이크 ");
+          System.out.print(st + "스트라이크 ");
+        }
+        if (ball != 0) {
+          System.out.println(ball + "볼");
         }
         if (count == 9) {
           System.out.println("낫씽");
@@ -85,7 +82,7 @@ public class Application {
           String RePlay = Console.readLine();
 
           switch (Character.getNumericValue(RePlay.charAt(0))) {
-            case 1: Computer.clear(); Computer.addAll(list()); continue outLoop;
+            case 1: Computer = list(); continue outLoop;
             case 2:            return;
             default: System.out.println("1/2 이외의 수 발견 : 프로그램을 종료합니다.");
           }
@@ -95,4 +92,6 @@ public class Application {
         System.err.println(e.getMessage());
         break;
       }}}
+
+
 }
